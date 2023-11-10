@@ -1,0 +1,8 @@
+setup.py
+aoc_meta/__init__.py
+aoc_meta/aoc_meta.py
+aoc_meta.egg-info/PKG-INFO
+aoc_meta.egg-info/SOURCES.txt
+aoc_meta.egg-info/dependency_links.txt
+aoc_meta.egg-info/requires.txt
+aoc_meta.egg-info/top_level.txt
