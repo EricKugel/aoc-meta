@@ -1,8 +1,10 @@
 import requests
 import os
 import re
+import time
+import tqdm
 
-cookies = {"session": "Put your session cookie here! 🍪🍪🍪🍪🍪🍪🍪"}
+cookies = {"session": "COOKIE NOM NOM NOM"}
 url = lambda year, day : f"https://adventofcode.com/{str(year)}/day/{str(day)}"
 
 year = 0
@@ -41,6 +43,15 @@ def submit(answer, part):
     )
     print(["", "P1: ", "P2: "][part] + str(answer))
     print("Res: " + (res := parse_response(request.text)))
+
+    if result := re.search(r"ERROR: Cooldown (\d+)m (\d+)s", res):
+        m, s = int(result.group(1)), int(result.group(2))
+        s = m * 60 + s
+        print(f"Resubmitting in {s} seconds (ctrl + c) to cancel")
+        for i in tqdm.tqdm(range(1, s + 1)):
+            time.sleep(1)
+        return submit(answer, part)
+    
     print()
     return res
 
@@ -66,7 +77,7 @@ def parse_response(raw):
 
     if main_text.startswith("That's not the right answer"):
         reason = re.search(r'your answer is too (\w*)', main_text)
-        return 'WRONG ANSWER:' + (f' - Too {reason.group(1)}' if reason else '')
+        return 'WRONG ANSWER' + (f': - Too {reason.group(1)}' if reason else '')
 
     if main_text.startswith("You don't seem to be solving the right level"):
         return 'ALREADY SOLVED'
